@@ -7,6 +7,10 @@
 <div class="content-container">
 
     <div class="content-body">
+        <form method="post" action="oauth-login" class="aui">
+            <input type="hidden" name="actionType" value="new">
+            <input type="submit" class="button" value="Login via Google">
+        </form>
     </div>
 </div>
 </body>

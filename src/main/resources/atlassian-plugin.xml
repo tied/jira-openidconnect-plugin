@@ -18,8 +18,25 @@
     <resource type="download" name="images/" location="/images"/>
     <context>oauth-plugin</context>
   </web-resource>
+
   <servlet name="Oauth Page Servlet" i18n-name-key="oauth-page-servlet.name" key="oauth-page-servlet" class="com.atlassian.tutorial.servlet.OauthPageServlet">
     <description key="oauth-page-servlet.description">The Oauth Page Servlet Plugin</description>
-    <url-pattern>/oauthpageservlet</url-pattern>
+    <url-pattern>/oauth-login</url-pattern>
   </servlet>
+
+  <web-section name="Login Link Section" i18n-name-key="login-link-section.name" key="login_link_section"
+               location="login_links_link" weight="10"/>
+
+  <web-item key="login_links_link" name="Login"
+            section="system.top.navigation.bar" weight="47">
+    <label>Logins</label>
+    <link linkId="login_links_link">http://www.atlassian.com</link>
+  </web-item>
+
+  <web-item key="website_link" name="OAuth Login" section="login_links_link/login_link_section" weight="10">
+    <label>OAuth Login</label>
+    <!-- todo: may be we can add better link on servlet -->
+    <link linkId="oauth-link" absolute="false">/plugins/servlet/oauth-login</link>
+  </web-item>
+
 </atlassian-plugin>
