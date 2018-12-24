@@ -1,0 +1,14 @@
+<html>
+<head>
+    <title>OAuth Login page</title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+
+    <div class="content-body">
+    </div>
+</div>
+</body>
+</html>
+
