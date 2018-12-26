@@ -9,7 +9,7 @@
     <div class="content-body">
         <form method="post" action="oauth-login" class="aui">
             <input type="hidden" name="actionType" value="new">
-            <input type="submit" class="button" value="Login via Google">
+            <input type="submit" class="button" value="Login via Open Id connect">
         </form>
     </div>
 </div>

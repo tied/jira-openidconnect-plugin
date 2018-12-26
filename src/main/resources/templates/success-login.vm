@@ -1,0 +1,14 @@
+<html>
+<head>
+    <title>You are logged in successfully</title>
+    <meta name="decorator" content="atl.general">
+</head>
+<body class="page-type-admin">
+<div class="content-container">
+    <div class="jumbotron">
+        <h3>Hello ${userId}!</h3>
+    </div>
+</div>
+</body>
+</html>
+

@@ -9,6 +9,7 @@ import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.tutorial.AuthenticationProvider;
+import com.auth0.AuthenticationController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,8 @@ public class OauthPageServlet extends HttpServlet {
 
     private static final String OAUTH_LOGIN_PAGE_TEMPLATE = "/templates/login-outh.vm";
 
+    private AuthenticationController authenticationController;
+
     public OauthPageServlet(IssueService issueService, ProjectService projectService, SearchService searchService,
                             TemplateRenderer templateRenderer, JiraAuthenticationContext authenticationContext, ConstantsManager constantsManager) {
         this.issueService = issueService;
@@ -47,12 +50,16 @@ public class OauthPageServlet extends HttpServlet {
         this.templateRenderer = templateRenderer;
         this.authenticationContext = authenticationContext;
         this.constantsManager = constantsManager;
+
+        authenticationController = AuthenticationProvider.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> context = new HashMap<>();
         resp.setContentType("text/html;charset=utf-8");
+
+        log.info("Render templage: {}", OAUTH_LOGIN_PAGE_TEMPLATE);
         templateRenderer.render(OAUTH_LOGIN_PAGE_TEMPLATE, context, resp.getWriter());
     }
 
@@ -61,12 +68,13 @@ public class OauthPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":"
-                + req.getServerPort() + "/plugins/servlet/callback";
-
-        String authorizeUrl = AuthenticationProvider.getInstance().buildAuthorizeUrl(req, redirectUri)
+                + req.getServerPort() + "/jira/plugins/servlet/callback";
+        log.info("Redirect uri: {}", redirectUri);
+        String authorizeUrl = authenticationController.buildAuthorizeUrl(req, redirectUri)
                 .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
                 .build();
 
+        log.info("Redirect on {} for authorization", authorizeUrl);
         resp.sendRedirect(authorizeUrl);
     }
 }

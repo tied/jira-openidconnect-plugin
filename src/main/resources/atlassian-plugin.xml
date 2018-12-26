@@ -24,6 +24,17 @@
     <url-pattern>/oauth-login</url-pattern>
   </servlet>
 
+  <servlet name="Callback Oauth Sevlet" i18n-name-key="callback-oauth-sevlet.name" key="callback-oauth-sevlet" class="com.atlassian.tutorial.servlet.CallbackAuthorizeServlet">
+    <description key="callback-oauth-sevlet.description">The callback of oauth authorization</description>
+    <url-pattern>/callback</url-pattern>
+  </servlet>
+
+  <servlet name="Success oauth logged in" i18n-name-key="success-oauth-logged-in.name" key="success-oauth-logged-in"
+           class="com.atlassian.tutorial.servlet.SuccessOauthLoggedInServlet">
+    <description key="callback-oauth-sevlet.description">The success logged in via Oauth</description>
+    <url-pattern>/success</url-pattern>
+  </servlet>
+
   <web-section name="Login Link Section" i18n-name-key="login-link-section.name" key="login_link_section"
                location="login_links_link" weight="10"/>
 
