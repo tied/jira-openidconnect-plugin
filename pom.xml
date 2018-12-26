@@ -112,6 +112,19 @@
             <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>mvc-auth-commons</artifactId>
+            <version>1.0.2</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -142,7 +155,15 @@
                         <!-- Add package to export here -->
                         <Export-Package>com.atlassian.tutorial.api,</Export-Package>
                         <!-- Add package import here -->
-                        <Import-Package>org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
+                        <!--
+                            todo: Need to investigate
+                            I have no idea how this package appeared here:
+
+                            !android.os*,
+                            !android.util.*,
+                            !sun.misc.*,
+                        -->
+                        <Import-Package>!android.os*, !android.util.*, !sun.misc.*, org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
                         <!-- Ensure plugin is spring powered -->
                         <Spring-Context>*</Spring-Context>
                     </instructions>
