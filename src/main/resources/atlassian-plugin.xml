@@ -46,7 +46,7 @@
 
   <web-item key="website_link" name="OAuth Login" section="login_links_link/login_link_section" weight="10">
     <label>OAuth Login</label>
-    <!-- todo: may be we can add better link on servlet -->
+    <!-- todo: set unique plugin id in the path -->
     <link linkId="oauth-link" absolute="false">/plugins/servlet/oauth-login</link>
   </web-item>
 

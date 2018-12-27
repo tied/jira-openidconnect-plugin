@@ -1,15 +1,13 @@
 package com.atlassian.tutorial.servlet;
 
-import com.atlassian.jira.bc.issue.IssueService;
-import com.atlassian.jira.bc.issue.search.SearchService;
-import com.atlassian.jira.bc.project.ProjectService;
-import com.atlassian.jira.config.ConstantsManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.tutorial.AuthenticationProvider;
+import com.atlassian.tutorial.util.SessionConstants;
 import com.auth0.AuthenticationController;
+import com.auth0.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,45 +22,43 @@ import java.util.Map;
 @Scanned
 public class OauthPageServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(OauthPageServlet.class);
+    private static final String OAUTH_LOGIN_PAGE_TEMPLATE = "/templates/login-oauth.vm";
 
-    @JiraImport
-    private IssueService issueService;
-    @JiraImport
-    private ProjectService projectService;
-    @JiraImport
-    private SearchService searchService;
     @JiraImport
     private TemplateRenderer templateRenderer;
-    @JiraImport
-    private JiraAuthenticationContext authenticationContext;
-    @JiraImport
-    private ConstantsManager constantsManager;
 
-    private static final String OAUTH_LOGIN_PAGE_TEMPLATE = "/templates/login-outh.vm";
+    @JiraImport
+    private JiraAuthenticationContext jiraAuthenticationContext;
 
     private AuthenticationController authenticationController;
 
-    public OauthPageServlet(IssueService issueService, ProjectService projectService, SearchService searchService,
-                            TemplateRenderer templateRenderer, JiraAuthenticationContext authenticationContext, ConstantsManager constantsManager) {
-        this.issueService = issueService;
-        this.projectService = projectService;
-        this.searchService = searchService;
+    public OauthPageServlet(TemplateRenderer templateRenderer, JiraAuthenticationContext jiraAuthenticationContext) {
         this.templateRenderer = templateRenderer;
-        this.authenticationContext = authenticationContext;
-        this.constantsManager = constantsManager;
-
+        this.jiraAuthenticationContext = jiraAuthenticationContext;
         authenticationController = AuthenticationProvider.getInstance();
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Map<String, Object> context = new HashMap<>();
-        resp.setContentType("text/html;charset=utf-8");
-
-        log.info("Render templage: {}", OAUTH_LOGIN_PAGE_TEMPLATE);
-        templateRenderer.render(OAUTH_LOGIN_PAGE_TEMPLATE, context, resp.getWriter());
+    public void init() throws ServletException {
+        super.init();
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final String idToken = (String) SessionUtils.get(req, SessionConstants.ID_TOKEN);
+        log.debug("Token {}: {}", SessionConstants.ID_TOKEN, idToken);
+
+        if (idToken != null) {
+            req.getRequestDispatcher("success").forward(req, resp);
+        } else {
+            // todo: check without else statement
+            Map<String, Object> context = new HashMap<>();
+            resp.setContentType("text/html;charset=utf-8");
+
+            log.info("Render template: {}", OAUTH_LOGIN_PAGE_TEMPLATE);
+            templateRenderer.render(OAUTH_LOGIN_PAGE_TEMPLATE, context, resp.getWriter());
+        }
+    }
 
     // todo: test this method
     @Override
@@ -72,6 +68,7 @@ public class OauthPageServlet extends HttpServlet {
         log.info("Redirect uri: {}", redirectUri);
         String authorizeUrl = authenticationController.buildAuthorizeUrl(req, redirectUri)
                 .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
+                .withScope("openid profile email")
                 .build();
 
         log.info("Redirect on {} for authorization", authorizeUrl);

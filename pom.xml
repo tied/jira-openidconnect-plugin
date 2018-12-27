@@ -113,6 +113,9 @@
             <scope>test</scope>
         </dependency>
 
+        <!--
+            todo: remove this mvc. Use just `auth0` artifact
+        -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>mvc-auth-commons</artifactId>
@@ -123,8 +126,20 @@
                     <groupId>javax.servlet</groupId>
                     <artifactId>javax.servlet-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.auth0</groupId>
+                    <artifactId>auth0</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>auth0</artifactId>
+            <version>1.9.1</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
