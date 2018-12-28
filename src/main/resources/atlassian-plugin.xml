@@ -41,6 +41,10 @@
     <url-pattern>/configuration</url-pattern>
   </servlet>
 
+  <rest key="rest" path="/oauth/admin" version="1.0">
+    <description>Provides REST resources for the admin UI.</description>
+  </rest>
+
   <web-section name="Login Link Section" i18n-name-key="login-link-section.name" key="login_link_section"
                location="login_links_link" weight="10">
   </web-section>
@@ -56,6 +60,12 @@
     <label>OAuth Login</label>
     <!-- todo: set unique plugin id in the path -->
     <link linkId="oauth-link" absolute="false">/plugins/servlet/oauth-login</link>
+  </web-item>
+
+  <web-item key="jira-menu-item" name="XProduct Admin" section="system.admin/globalsettings" weight="10" application="jira">
+    <description>Link to oauth-login page.</description>
+    <label key="xproduct.admin.label" />
+    <link linkId="xproduct-admin-link">/plugins/servlet/configuration</link>
   </web-item>
 
 </atlassian-plugin>

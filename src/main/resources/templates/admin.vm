@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>OAuth admin form</title>
+    <meta name="decorator" content="atl.admin">
+    $webResourceManager.requireResource("com.atlassian.tutorial.oauth-plugin:oauth-plugin-resources")
+</head>
+<body>
+<form id="admin">
+    <div>
+        <label for="name">Domain</label>
+        <input type="text" id="domain" name="domain" class="text">
+    </div>
+    <div>
+        <label for="time">Client Id</label>
+        <input type="text" id="client-id" name="client-id" class="text">
+    </div>
+    <div>
+        <label for="time">Client Secret</label>
+        <input type="text" id="client-secret" name="client-secret">
+    </div>
+    <div>
+        <input type="submit" value="Save" class="button">
+    </div>
+</form>
+</body>
+</html>
