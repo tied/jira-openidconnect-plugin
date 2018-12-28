@@ -19,7 +19,7 @@
     <context>oauth-plugin</context>
   </web-resource>
 
-  <servlet name="Oauth Page Servlet" i18n-name-key="oauth-page-servlet.name" key="oauth-page-servlet" class="com.atlassian.tutorial.servlet.OauthPageServlet">
+  <servlet name="Oauth Page Servlet" i18n-name-key="oauth-page-servlet.name" key="oauth-page-servlet" class="com.atlassian.tutorial.servlet.OauthLoginServlet">
     <description key="oauth-page-servlet.description">The Oauth Page Servlet Plugin</description>
     <url-pattern>/oauth-login</url-pattern>
   </servlet>
@@ -31,17 +31,25 @@
 
   <servlet name="Success oauth logged in" i18n-name-key="success-oauth-logged-in.name" key="success-oauth-logged-in"
            class="com.atlassian.tutorial.servlet.SuccessOauthLoggedInServlet">
-    <description key="callback-oauth-sevlet.description">The success logged in via Oauth</description>
+    <description key="success-oauth-logged-in.description">The success logged in via Oauth</description>
     <url-pattern>/success</url-pattern>
   </servlet>
 
+  <servlet name="OAuth admin configuration" i18n-name-key="oauth-admin-configuration.name" key="oauth-admin-configuration"
+           class="com.atlassian.tutorial.servlet.AdminServlet">
+    <description key="oauth-admin-configuration.description">The success logged in via Oauth</description>
+    <url-pattern>/configuration</url-pattern>
+  </servlet>
+
   <web-section name="Login Link Section" i18n-name-key="login-link-section.name" key="login_link_section"
-               location="login_links_link" weight="10"/>
+               location="login_links_link" weight="10">
+  </web-section>
 
   <web-item key="login_links_link" name="Login"
             section="system.top.navigation.bar" weight="47">
     <label>Logins</label>
     <link linkId="login_links_link">http://www.atlassian.com</link>
+    <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" invert="true"/>
   </web-item>
 
   <web-item key="website_link" name="OAuth Login" section="login_links_link/login_link_section" weight="10">

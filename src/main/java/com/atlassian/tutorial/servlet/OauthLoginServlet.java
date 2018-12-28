@@ -1,12 +1,12 @@
 package com.atlassian.tutorial.servlet;
 
-import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.tutorial.auth.AuthenticationHandler;
 import com.atlassian.tutorial.auth.AuthenticationProvider;
 import com.atlassian.tutorial.util.SessionConstants;
+import com.google.common.net.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,22 +19,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Scanned
-public class OauthPageServlet extends HttpServlet {
-    private static final Logger log = LoggerFactory.getLogger(OauthPageServlet.class);
+public class OauthLoginServlet extends HttpServlet {
+    private static final Logger log = LoggerFactory.getLogger(OauthLoginServlet.class);
     private static final String OAUTH_LOGIN_PAGE_TEMPLATE = "/templates/login-oauth.vm";
 
     @JiraImport
     private TemplateRenderer templateRenderer;
 
-    @JiraImport
-    private JiraAuthenticationContext jiraAuthenticationContext;
-
     private AuthenticationHandler authenticationHandler;
 
-    public OauthPageServlet(TemplateRenderer templateRenderer, JiraAuthenticationContext jiraAuthenticationContext) {
+    public OauthLoginServlet(TemplateRenderer templateRenderer) {
         this.templateRenderer = templateRenderer;
-        this.jiraAuthenticationContext = jiraAuthenticationContext;
-        authenticationHandler = AuthenticationProvider.getInstance();
+        this.authenticationHandler = AuthenticationProvider.getInstance();
     }
 
     @Override
@@ -50,9 +46,8 @@ public class OauthPageServlet extends HttpServlet {
         if (idToken != null) {
             req.getRequestDispatcher("success").forward(req, resp);
         } else {
-            // todo: check without else statement
             Map<String, Object> context = new HashMap<>();
-            resp.setContentType("text/html;charset=utf-8");
+            resp.setContentType(MediaType.HTML_UTF_8.toString());
 
             log.info("Render template: {}", OAUTH_LOGIN_PAGE_TEMPLATE);
             templateRenderer.render(OAUTH_LOGIN_PAGE_TEMPLATE, context, resp.getWriter());
@@ -70,10 +65,6 @@ public class OauthPageServlet extends HttpServlet {
                 .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
                 .withScope("openid profile email")
                 .build();
-//        String authorizeUrl = authenticationController.buildAuthorizeUrl(req, redirectUri)
-//                .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
-//                .withScope("openid profile email")
-//                .build();
 
         log.info("Redirect on {} for authorization", authorizeUrl);
         resp.sendRedirect(authorizeUrl);

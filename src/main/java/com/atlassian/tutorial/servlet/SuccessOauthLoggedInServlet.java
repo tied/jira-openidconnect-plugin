@@ -63,8 +63,10 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
         Map<String, Object> userInfoValues = (Map<String, Object>) req.getSession().getAttribute(SessionConstants.USER_INFO);
 
         Map<String, Object> context = new HashMap<>();
-        context.put("getUserInfo", userInfoValues);
+        context.put("userInfo", userInfoValues);
         context.put("userName", userInfoValues.get("nickname"));
+
+        log.info("User info: {}", userInfoValues);
 
         // todo: it can be only one user. need to think about this iterable
         Iterable<ApplicationUser> usersByEmail = userSearchService.findUsersByEmail((String) userInfoValues.get("email"));
@@ -117,4 +119,5 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
         session.setAttribute(DefaultAuthenticator.LOGGED_IN_KEY, appUser);
         session.setAttribute(DefaultAuthenticator.LOGGED_OUT_KEY, null);
     }
+
 }
