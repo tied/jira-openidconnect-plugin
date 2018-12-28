@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public class CallbackAuthorizeServlet extends HttpServlet {
 
@@ -40,7 +41,6 @@ public class CallbackAuthorizeServlet extends HttpServlet {
         redirectOnSuccess = "/jira/plugins/servlet/success";
         redirectOnFail = "/jira/plugins/servlet/oauth-login";
         log.debug("Initialization of {} servlet finished", this.getClass().getName());
-
     }
 
     @Override
@@ -71,9 +71,10 @@ public class CallbackAuthorizeServlet extends HttpServlet {
 
             // todo: handle APIException and Auth0Exception
             UserInfo userInfo = userInfoRequest.execute();
-            log.info("User info: {}", userInfo.getValues());
+            Map<String, Object> userInfoValues = userInfo.getValues();
+            log.info("User info: {}", userInfoValues);
 
-            SessionUtils.set(req, SessionConstants.USER_INFO, userInfo);
+            SessionUtils.set(req, SessionConstants.USER_INFO, userInfoValues);
 
             log.info("Redirect on: {}", redirectOnSuccess);
             resp.sendRedirect(redirectOnSuccess);
