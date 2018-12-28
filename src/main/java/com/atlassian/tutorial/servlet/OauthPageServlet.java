@@ -4,10 +4,9 @@ import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.templaterenderer.TemplateRenderer;
-import com.atlassian.tutorial.AuthenticationProvider;
+import com.atlassian.tutorial.auth.AuthenticationHandler;
+import com.atlassian.tutorial.auth.AuthenticationProvider;
 import com.atlassian.tutorial.util.SessionConstants;
-import com.auth0.AuthenticationController;
-import com.auth0.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,12 +29,12 @@ public class OauthPageServlet extends HttpServlet {
     @JiraImport
     private JiraAuthenticationContext jiraAuthenticationContext;
 
-    private AuthenticationController authenticationController;
+    private AuthenticationHandler authenticationHandler;
 
     public OauthPageServlet(TemplateRenderer templateRenderer, JiraAuthenticationContext jiraAuthenticationContext) {
         this.templateRenderer = templateRenderer;
         this.jiraAuthenticationContext = jiraAuthenticationContext;
-        authenticationController = AuthenticationProvider.getInstance();
+        authenticationHandler = AuthenticationProvider.getInstance();
     }
 
     @Override
@@ -45,7 +44,7 @@ public class OauthPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String idToken = (String) SessionUtils.get(req, SessionConstants.ID_TOKEN);
+        final String idToken = (String) req.getSession().getAttribute(SessionConstants.ID_TOKEN);
         log.debug("Token {}: {}", SessionConstants.ID_TOKEN, idToken);
 
         if (idToken != null) {
@@ -66,10 +65,15 @@ public class OauthPageServlet extends HttpServlet {
         String redirectUri = req.getScheme() + "://" + req.getServerName() + ":"
                 + req.getServerPort() + "/jira/plugins/servlet/callback";
         log.info("Redirect uri: {}", redirectUri);
-        String authorizeUrl = authenticationController.buildAuthorizeUrl(req, redirectUri)
+
+        String authorizeUrl = authenticationHandler.authorizeUrl(redirectUri)
                 .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
                 .withScope("openid profile email")
                 .build();
+//        String authorizeUrl = authenticationController.buildAuthorizeUrl(req, redirectUri)
+//                .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
+//                .withScope("openid profile email")
+//                .build();
 
         log.info("Redirect on {} for authorization", authorizeUrl);
         resp.sendRedirect(authorizeUrl);

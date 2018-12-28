@@ -1,6 +1,6 @@
-package com.atlassian.tutorial;
+package com.atlassian.tutorial.auth;
 
-import com.auth0.AuthenticationController;
+import com.auth0.client.auth.AuthAPI;
 
 public abstract class AuthenticationProvider {
 
@@ -9,9 +9,8 @@ public abstract class AuthenticationProvider {
     private static final String CLIENT_ID = "";
     private static final String CLIENT_SECRET = "";
 
-    public static AuthenticationController getInstance() {
-        return AuthenticationController.newBuilder(DOMAIN, CLIENT_ID, CLIENT_SECRET)
-                .build();
+    public static AuthenticationHandler getInstance() {
+        return new AuthenticationHandler(new AuthAPI(DOMAIN, CLIENT_ID, CLIENT_SECRET));
     }
 
     public static String getDomain() {

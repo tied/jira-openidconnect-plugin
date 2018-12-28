@@ -1,16 +1,12 @@
 package com.atlassian.tutorial.servlet;
 
-import com.atlassian.tutorial.AuthenticationProvider;
+import com.atlassian.tutorial.auth.AuthenticationHandler;
+import com.atlassian.tutorial.auth.AuthenticationProvider;
 import com.atlassian.tutorial.util.SessionConstants;
-import com.auth0.AuthenticationController;
-import com.auth0.IdentityVerificationException;
-import com.auth0.SessionUtils;
-import com.auth0.Tokens;
+import com.auth0.json.auth.TokenHolder;
 import com.auth0.json.auth.UserInfo;
-import com.auth0.net.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.auth0.client.auth.AuthAPI;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,9 +20,7 @@ public class CallbackAuthorizeServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(CallbackAuthorizeServlet.class);
 
-    private AuthenticationController authenticationController;
-
-    private AuthAPI authAPI;
+    private AuthenticationHandler authenticationHandler;
     private String redirectOnSuccess;
     private String redirectOnFail;
 
@@ -35,8 +29,7 @@ public class CallbackAuthorizeServlet extends HttpServlet {
         log.debug("Initialize {} servlet", this.getClass().getName());
         super.init(config);
 
-        authenticationController = AuthenticationProvider.getInstance();
-        authAPI = new AuthAPI(AuthenticationProvider.getDomain(), AuthenticationProvider.getClientId(), AuthenticationProvider.getClientSecret());
+        authenticationHandler = AuthenticationProvider.getInstance();
 
         redirectOnSuccess = "/jira/plugins/servlet/success";
         redirectOnFail = "/jira/plugins/servlet/oauth-login";
@@ -57,36 +50,28 @@ public class CallbackAuthorizeServlet extends HttpServlet {
         try {
             log.info("Handle callback authorize request");
 
-            Tokens tokens = authenticationController.handle(req);
+            TokenHolder tokens = authenticationHandler.handle(req);
             log.info("Token processed successfully: {}", tokens);
 
-            SessionUtils.set(req, SessionConstants.ACCESS_TOKEN, tokens.getAccessToken());
+            req.getSession().setAttribute(SessionConstants.ACCESS_TOKEN, tokens.getAccessToken());
             log.debug("Token {}: {}", SessionConstants.ACCESS_TOKEN, tokens.getAccessToken());
 
-            SessionUtils.set(req, SessionConstants.ID_TOKEN, tokens.getIdToken());
+            req.getSession().setAttribute(SessionConstants.ID_TOKEN, tokens.getIdToken());
             log.debug("Token {}: {}", SessionConstants.ID_TOKEN, tokens.getIdToken());
 
-            // todo: replace code on the AuthAPI only
-            Request<UserInfo> userInfoRequest = authAPI.userInfo(tokens.getAccessToken());
+            // todo: handle Auth0Exception
+            UserInfo userInfo = authenticationHandler.getUserInfo(tokens.getAccessToken());
 
-            // todo: handle APIException and Auth0Exception
-            UserInfo userInfo = userInfoRequest.execute();
             Map<String, Object> userInfoValues = userInfo.getValues();
             log.info("User info: {}", userInfoValues);
 
-            SessionUtils.set(req, SessionConstants.USER_INFO, userInfoValues);
+            req.getSession().setAttribute(SessionConstants.USER_INFO, userInfoValues);
 
             log.info("Redirect on: {}", redirectOnSuccess);
             resp.sendRedirect(redirectOnSuccess);
-        } catch (IdentityVerificationException e) {
+        } catch (RuntimeException e) {
             // todo: check error handling
             log.error("Token is not correct: {}");
-            log.error("Code of error: {}", e.getCode());
-            if (e.isAPIError()) {
-                log.error("It is API error!");
-            } else if (e.isJWTError()) {
-                log.error("It is JWT error!");
-            }
             e.printStackTrace();
 
             log.info("Redirect on: {}", redirectOnFail);
