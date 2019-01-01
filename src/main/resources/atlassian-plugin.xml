@@ -64,8 +64,8 @@
 
   <web-item key="jira-menu-item" name="XProduct Admin" section="system.admin/globalsettings" weight="10" application="jira">
     <description>Link to oauth-login page.</description>
-    <label key="xproduct.admin.label" />
-    <link linkId="xproduct-admin-link">/plugins/servlet/configuration</link>
+    <label key="oauth.admin.label" />
+    <link linkId="oauth-admin-link">/plugins/servlet/configuration</link>
   </web-item>
 
 </atlassian-plugin>

@@ -1,5 +1,6 @@
 package com.atlassian.tutorial.servlet;
 
+import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.tutorial.auth.AuthenticationHandler;
 import com.atlassian.tutorial.auth.AuthenticationProvider;
 import com.atlassian.tutorial.util.SessionConstants;
@@ -7,6 +8,7 @@ import com.auth0.json.auth.TokenHolder;
 import com.auth0.json.auth.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,11 +18,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
+@Scanned
 public class CallbackAuthorizeServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(CallbackAuthorizeServlet.class);
 
-    private AuthenticationHandler authenticationHandler;
+    private AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    public CallbackAuthorizeServlet(AuthenticationProvider authenticationProvider) {
+        this.authenticationProvider = authenticationProvider;
+    }
+
     private String redirectOnSuccess;
     private String redirectOnFail;
 
@@ -28,8 +37,6 @@ public class CallbackAuthorizeServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         log.debug("Initialize {} servlet", this.getClass().getName());
         super.init(config);
-
-        authenticationHandler = AuthenticationProvider.getInstance();
 
         redirectOnSuccess = "/jira/plugins/servlet/success";
         redirectOnFail = "/jira/plugins/servlet/oauth-login";
@@ -47,6 +54,7 @@ public class CallbackAuthorizeServlet extends HttpServlet {
     }
 
     private void handle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        AuthenticationHandler authenticationHandler = authenticationProvider.getInstance();
         try {
             log.info("Handle callback authorize request");
 

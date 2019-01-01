@@ -1,27 +1,58 @@
 package com.atlassian.tutorial.auth;
 
+import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
+import com.atlassian.sal.api.pluginsettings.PluginSettings;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
+import com.atlassian.sal.api.transaction.TransactionTemplate;
+import com.atlassian.tutorial.config.AuthenticationInfo;
+import com.atlassian.tutorial.config.AuthenticationInfoException;
 import com.auth0.client.auth.AuthAPI;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public abstract class AuthenticationProvider {
+@Component
+public final class AuthenticationProvider {
 
-    // todo: set this parameters in the config file
-    private static final String DOMAIN = "";
-    private static final String CLIENT_ID = "";
-    private static final String CLIENT_SECRET = "";
+    private final TransactionTemplate transactionTemplate;
 
-    public static AuthenticationHandler getInstance() {
-        return new AuthenticationHandler(new AuthAPI(DOMAIN, CLIENT_ID, CLIENT_SECRET));
+    private final PluginSettingsFactory pluginSettingsFactory;
+
+    @Autowired
+    public AuthenticationProvider(@JiraImport TransactionTemplate transactionTemplate,
+                                  @JiraImport PluginSettingsFactory pluginSettingsFactory) {
+        this.transactionTemplate = transactionTemplate;
+        this.pluginSettingsFactory = pluginSettingsFactory;
     }
 
-    public static String getDomain() {
-        return DOMAIN;
+    public AuthenticationHandler getInstance() {
+        return transactionTemplate.execute(() -> {
+            PluginSettings settings = pluginSettingsFactory.createGlobalSettings();
+            AuthenticationInfo config = new AuthenticationInfo();
+            config.setDomain((String) settings.get(AuthenticationInfo.class.getName() + ".domain"));
+            config.setClientId((String) settings.get(AuthenticationInfo.class.getName() + ".clientId"));
+            config.setClientSecret((String) settings.get(AuthenticationInfo.class.getName() + ".clientSecret"));
+
+            checkConfig(config);
+            AuthAPI authAPI = new AuthAPI(config.getDomain(), config.getClientId(), config.getClientSecret());
+            return new AuthenticationHandler(authAPI, config);
+        });
     }
 
-    public static String getClientId() {
-        return CLIENT_ID;
+    private void checkConfig(AuthenticationInfo config) {
+        StringBuilder sb = new StringBuilder();
+        if (StringUtils.isBlank(config.getDomain())) {
+            sb.append("Authorization domain is not set up!").append(System.lineSeparator());
+        }
+        if (StringUtils.isBlank(config.getClientId())) {
+            sb.append("Client id is not set up! ").append(System.lineSeparator());
+        }
+        if (StringUtils.isBlank(config.getClientSecret())) {
+            sb.append("Client secret is not set up! ").append(System.lineSeparator());
+        }
+        if (sb.length() > 0) {
+            throw new AuthenticationInfoException(sb.toString());
+        }
     }
 
-    public static String getClientSecret() {
-        return CLIENT_SECRET;
-    }
 }

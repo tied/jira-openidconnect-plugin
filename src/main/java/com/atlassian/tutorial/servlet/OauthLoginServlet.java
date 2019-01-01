@@ -9,6 +9,7 @@ import com.atlassian.tutorial.util.SessionConstants;
 import com.google.common.net.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,17 +21,18 @@ import java.util.Map;
 
 @Scanned
 public class OauthLoginServlet extends HttpServlet {
+
     private static final Logger log = LoggerFactory.getLogger(OauthLoginServlet.class);
     private static final String OAUTH_LOGIN_PAGE_TEMPLATE = "/templates/login-oauth.vm";
 
-    @JiraImport
     private TemplateRenderer templateRenderer;
 
-    private AuthenticationHandler authenticationHandler;
+    private AuthenticationProvider authenticationProvider;
 
-    public OauthLoginServlet(TemplateRenderer templateRenderer) {
+    @Autowired
+    public OauthLoginServlet(@JiraImport TemplateRenderer templateRenderer, AuthenticationProvider authenticationProvider) {
         this.templateRenderer = templateRenderer;
-        this.authenticationHandler = AuthenticationProvider.getInstance();
+        this.authenticationProvider = authenticationProvider;
     }
 
     @Override
@@ -61,8 +63,9 @@ public class OauthLoginServlet extends HttpServlet {
                 + req.getServerPort() + "/jira/plugins/servlet/callback";
         log.info("Redirect uri: {}", redirectUri);
 
-        String authorizeUrl = authenticationHandler.authorizeUrl(redirectUri)
-                .withAudience(String.format("https://%s/userinfo", AuthenticationProvider.getDomain()))
+        AuthenticationHandler authHandler = authenticationProvider.getInstance();
+        String authorizeUrl = authHandler.authorizeUrl(redirectUri)
+                .withAudience(String.format("https://%s/userinfo", authHandler.getDomain()))
                 .withScope("openid profile email")
                 .build();
 

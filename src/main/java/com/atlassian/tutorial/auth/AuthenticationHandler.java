@@ -1,5 +1,6 @@
 package com.atlassian.tutorial.auth;
 
+import com.atlassian.tutorial.config.AuthenticationInfo;
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.auth.AuthorizeUrlBuilder;
 import com.auth0.exception.Auth0Exception;
@@ -25,9 +26,11 @@ public class AuthenticationHandler {
     private static final String KEY_FORM_POST = "form_post";
 
     private AuthAPI authAPI;
+    private AuthenticationInfo authInfo;
 
-    public AuthenticationHandler(AuthAPI authAPI) {
+    public AuthenticationHandler(AuthAPI authAPI, AuthenticationInfo authInfo) {
         this.authAPI = authAPI;
+        this.authInfo = authInfo;
     }
 
     public TokenHolder handle(HttpServletRequest req) {
@@ -62,6 +65,10 @@ public class AuthenticationHandler {
 
     public AuthorizeUrlBuilder authorizeUrl(String redirectUri) {
         return authAPI.authorizeUrl(redirectUri);
+    }
+
+    public String getDomain() {
+        return authInfo.getDomain();
     }
 
 }
