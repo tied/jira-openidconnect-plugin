@@ -5,20 +5,20 @@
     $webResourceManager.requireResource("com.atlassian.tutorial.oauth-plugin:oauth-plugin-resources")
 </head>
 <body>
-<form id="admin">
-    <div>
+<form id="admin" class="aui left-label">
+    <div class="aui-group">
         <label for="name">Domain</label>
-        <input type="text" id="domain" name="domain" class="text">
+        <input type="text" id="domain" name="domain" class="text full-width-field">
     </div>
-    <div>
+    <div class="aui-group">
         <label for="time">Client Id</label>
-        <input type="text" id="client-id" name="client-id" class="text">
+        <input type="text" id="client-id" name="client-id" class="text full-width-field">
     </div>
-    <div>
+    <div class="aui-group">
         <label for="time">Client Secret</label>
-        <input type="text" id="client-secret" name="client-secret">
+        <input type="text" id="client-secret" name="client-secret" class="text full-width-field">
     </div>
-    <div>
+    <div class="aui-group">
         <input type="submit" value="Save" class="button">
     </div>
 </form>

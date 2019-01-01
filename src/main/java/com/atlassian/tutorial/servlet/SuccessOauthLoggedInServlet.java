@@ -52,7 +52,6 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // todo: check user logged in or not
         String idToken = (String) req.getSession().getAttribute(SessionConstants.ID_TOKEN);
         // todo: remove tokens from logs
         log.debug("Token {}: {}", SessionConstants.ID_TOKEN, idToken);
@@ -68,7 +67,6 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
 
         log.info("User info: {}", userInfoValues);
 
-        // todo: it can be only one user. need to think about this iterable
         Iterable<ApplicationUser> usersByEmail = userSearchService.findUsersByEmail((String) userInfoValues.get("email"));
         Iterator<ApplicationUser> iterator = usersByEmail.iterator();
         ApplicationUser appUser;
