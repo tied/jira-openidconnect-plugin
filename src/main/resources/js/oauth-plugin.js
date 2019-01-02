@@ -26,12 +26,11 @@
             url: AJS.contextPath() + "/rest/oauth/admin/1.0/",
             type: "PUT",
             contentType: "application/json",
-            data: '{ "domain": "' + AJS.$("#domain").attr("value")
-                + '", "clientId": "' + AJS.$("#client-id").attr("value")
-                + '", "clientSecret": "' + AJS.$("#client-secret").attr("value")  + '" }',
+            data: '{ "domain": "' + AJS.$("#domain").attr("value").trim()
+                + '", "clientId": "' + AJS.$("#client-id").attr("value").trim()
+                + '", "clientSecret": "' + AJS.$("#client-secret").attr("value").trim()  + '" }',
             processData: false
         });
     }
 
-    console.log("Hello oauth plugin!")
 })(AJS.$ || jQuery);

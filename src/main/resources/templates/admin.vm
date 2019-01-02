@@ -6,20 +6,26 @@
 </head>
 <body>
 <form id="admin" class="aui left-label">
-    <div class="aui-group">
-        <label for="name">Domain</label>
-        <input type="text" id="domain" name="domain" class="text full-width-field">
-    </div>
-    <div class="aui-group">
-        <label for="time">Client Id</label>
-        <input type="text" id="client-id" name="client-id" class="text full-width-field">
-    </div>
-    <div class="aui-group">
-        <label for="time">Client Secret</label>
-        <input type="text" id="client-secret" name="client-secret" class="text full-width-field">
-    </div>
-    <div class="aui-group">
-        <input type="submit" value="Save" class="button">
+    <div class="form-body">
+        <div class="field-group">
+            <label for="name">Domain</label>
+            <input type="text" id="domain" name="domain" required class="text">
+        </div>
+        <div class="field-group">
+            <label for="time">Client Id</label>
+            <input type="text" id="client-id" name="client-id" required class="text">
+        </div>
+        <div class="field-group">
+            <label for="time">Client Secret</label>
+            <input type="text" id="client-secret" name="client-secret" required class="text">
+        </div>
+        <div class="form-footer">
+            <div class="buttons-container">
+                <div class="buttons">
+                    <input type="submit" value="Save" class="aui-button">
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 </body>
