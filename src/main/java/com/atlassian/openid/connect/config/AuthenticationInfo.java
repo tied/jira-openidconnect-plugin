@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.config;
+package com.atlassian.openid.connect.config;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

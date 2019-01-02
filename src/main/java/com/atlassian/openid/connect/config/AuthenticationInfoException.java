@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.config;
+package com.atlassian.openid.connect.config;
 
 public class AuthenticationInfoException extends RuntimeException {
 

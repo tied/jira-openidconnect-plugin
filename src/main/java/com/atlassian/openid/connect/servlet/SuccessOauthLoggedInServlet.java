@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.servlet;
+package com.atlassian.openid.connect.servlet;
 
 import com.atlassian.jira.bc.user.search.UserSearchService;
 import com.atlassian.jira.exception.CreateException;
@@ -7,11 +7,11 @@ import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.UserDetails;
 import com.atlassian.jira.user.util.UserManager;
+import com.atlassian.openid.connect.util.SessionConstants;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.seraph.auth.DefaultAuthenticator;
 import com.atlassian.templaterenderer.TemplateRenderer;
-import com.atlassian.tutorial.util.SessionConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

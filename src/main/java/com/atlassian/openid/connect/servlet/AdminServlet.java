@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.servlet;
+package com.atlassian.openid.connect.servlet;
 
 import com.atlassian.jira.permission.GlobalPermissionKey;
 import com.atlassian.jira.plugin.webfragment.conditions.cache.ConditionCacheKeys;

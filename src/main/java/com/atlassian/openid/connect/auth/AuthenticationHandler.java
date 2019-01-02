@@ -1,6 +1,6 @@
-package com.atlassian.tutorial.auth;
+package com.atlassian.openid.connect.auth;
 
-import com.atlassian.tutorial.config.AuthenticationInfo;
+import com.atlassian.openid.connect.config.AuthenticationInfo;
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.auth.AuthorizeUrlBuilder;
 import com.auth0.exception.Auth0Exception;

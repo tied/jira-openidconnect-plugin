@@ -19,26 +19,26 @@
     <context>oauth-plugin</context>
   </web-resource>
 
-  <servlet name="Oauth Page Servlet" i18n-name-key="oauth-page-servlet.name" key="oauth-page-servlet" class="com.atlassian.tutorial.servlet.OauthLoginServlet">
+  <servlet name="Oauth Page Servlet" i18n-name-key="oauth-page-servlet.name" key="oauth-page-servlet" class="com.atlassian.openid.connect.servlet.OauthLoginServlet">
     <description key="oauth-page-servlet.description">The Oauth Page Servlet Plugin</description>
     <url-pattern>/oauth-login</url-pattern>
   </servlet>
 
-  <servlet name="Callback Oauth Sevlet" i18n-name-key="callback-oauth-sevlet.name" key="callback-oauth-sevlet" class="com.atlassian.tutorial.servlet.CallbackAuthorizeServlet">
+  <servlet name="Callback Oauth Sevlet" i18n-name-key="callback-oauth-sevlet.name" key="callback-oauth-sevlet" class="com.atlassian.openid.connect.servlet.CallbackAuthorizeServlet">
     <description key="callback-oauth-sevlet.description">The callback of oauth authorization</description>
     <url-pattern>/callback</url-pattern>
   </servlet>
 
   <servlet name="Success oauth logged in" i18n-name-key="success-oauth-logged-in.name" key="success-oauth-logged-in"
-           class="com.atlassian.tutorial.servlet.SuccessOauthLoggedInServlet">
+           class="com.atlassian.openid.connect.servlet.SuccessOauthLoggedInServlet">
     <description key="success-oauth-logged-in.description">The success logged in via Oauth</description>
     <url-pattern>/success</url-pattern>
   </servlet>
 
   <servlet name="OAuth admin configuration" i18n-name-key="oauth-admin-configuration.name" key="oauth-admin-configuration"
-           class="com.atlassian.tutorial.servlet.AdminServlet">
+           class="com.atlassian.openid.connect.servlet.AdminServlet">
     <description key="oauth-admin-configuration.description">The success logged in via Oauth</description>
-    <url-pattern>/configuration</url-pattern>
+    <url-pattern>/oauth/configuration</url-pattern>
   </servlet>
 
   <rest key="rest" path="/oauth/admin" version="1.0">
@@ -49,15 +49,9 @@
                location="login_links_link" weight="10">
   </web-section>
 
-  <web-item key="login_links_link" name="Login"
-            section="system.top.navigation.bar" weight="47">
-    <label>Logins</label>
-    <link linkId="login_links_link">http://www.atlassian.com</link>
+  <web-item key="website_link" name="OAuth Login" section="system.top.navigation.bar" weight="10">
     <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" invert="true"/>
-  </web-item>
-
-  <web-item key="website_link" name="OAuth Login" section="login_links_link/login_link_section" weight="10">
-    <label>OAuth Login</label>
+    <label>Open ID Connect Plugin</label>
     <!-- todo: set unique plugin id in the path -->
     <link linkId="oauth-link" absolute="false">/plugins/servlet/oauth-login</link>
   </web-item>
@@ -65,7 +59,7 @@
   <web-item key="jira-menu-item" name="XProduct Admin" section="system.admin/globalsettings" weight="10" application="jira">
     <description>Link to oauth-login page.</description>
     <label key="oauth.admin.label" />
-    <link linkId="oauth-admin-link">/plugins/servlet/configuration</link>
+    <link linkId="oauth-admin-link">/plugins/servlet/oauth/configuration</link>
   </web-item>
 
 </atlassian-plugin>

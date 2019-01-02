@@ -1,7 +1,7 @@
-package com.atlassian.tutorial.util;
+package com.atlassian.openid.connect.util;
 
-import com.atlassian.tutorial.config.AuthenticationInfo;
-import com.atlassian.tutorial.config.AuthenticationInfoException;
+import com.atlassian.openid.connect.config.AuthenticationInfo;
+import com.atlassian.openid.connect.config.AuthenticationInfoException;
 import org.apache.commons.lang3.StringUtils;
 
 public final class AuthenticationInfoChecker {

@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.config;
+package com.atlassian.openid.connect.config;
 
 import com.atlassian.jira.permission.GlobalPermissionKey;
 import com.atlassian.jira.plugin.webfragment.conditions.cache.ConditionCacheKeys;
@@ -11,7 +11,7 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import com.atlassian.tutorial.util.AuthenticationInfoChecker;
+import com.atlassian.openid.connect.util.AuthenticationInfoChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

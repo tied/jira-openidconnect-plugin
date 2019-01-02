@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.util;
+package com.atlassian.openid.connect.util;
 
 public class SessionConstants {
     public static final String ACCESS_TOKEN = "accessToken";

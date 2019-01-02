@@ -1,11 +1,11 @@
-package com.atlassian.tutorial.auth;
+package com.atlassian.openid.connect.auth;
 
+import com.atlassian.openid.connect.config.AuthenticationInfo;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import com.atlassian.tutorial.config.AuthenticationInfo;
-import com.atlassian.tutorial.util.AuthenticationInfoChecker;
+import com.atlassian.openid.connect.util.AuthenticationInfoChecker;
 import com.auth0.client.auth.AuthAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

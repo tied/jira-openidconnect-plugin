@@ -1,4 +1,4 @@
-package com.atlassian.tutorial.auth;
+package com.atlassian.openid.connect.auth;
 
 public class AuthenticationException extends RuntimeException {
     public AuthenticationException() {

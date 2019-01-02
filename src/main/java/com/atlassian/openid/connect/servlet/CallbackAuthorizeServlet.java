@@ -1,9 +1,9 @@
-package com.atlassian.tutorial.servlet;
+package com.atlassian.openid.connect.servlet;
 
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
-import com.atlassian.tutorial.auth.AuthenticationHandler;
-import com.atlassian.tutorial.auth.AuthenticationProvider;
-import com.atlassian.tutorial.util.SessionConstants;
+import com.atlassian.openid.connect.auth.AuthenticationHandler;
+import com.atlassian.openid.connect.auth.AuthenticationProvider;
+import com.atlassian.openid.connect.util.SessionConstants;
 import com.auth0.json.auth.TokenHolder;
 import com.auth0.json.auth.UserInfo;
 import org.slf4j.Logger;
