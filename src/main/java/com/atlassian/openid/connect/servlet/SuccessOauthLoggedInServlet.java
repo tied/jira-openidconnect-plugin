@@ -78,6 +78,8 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
             log.info("User with email {} not found", userInfoValues.get("email"));
             appUser = createApplicationUser(userInfoValues);
             if (appUser == null) {
+                log.error("User was not created!");
+                templateRenderer.render(SUCCESS_LOGIN_PAGE, resp.getWriter());
                 return;
             }
         }

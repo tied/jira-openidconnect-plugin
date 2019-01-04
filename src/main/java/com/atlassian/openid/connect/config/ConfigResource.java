@@ -88,8 +88,9 @@ public class ConfigResource {
             return Response.status(HttpServletResponse.SC_FORBIDDEN).build();
         }
 
-        log.info("Update authentication info for Open ID connect. {}", config);
         AuthenticationInfoChecker.checkAuthenticationInfo(config);
+
+        log.info("Update authentication info for Open ID connect. Old config {}", config);
 
         transactionTemplate.execute(() -> {
             PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
@@ -98,6 +99,7 @@ public class ConfigResource {
             pluginSettings.put(AuthenticationInfo.class.getName() + ".clientSecret", config.getClientSecret());
 
             log.info("Authentication info for Open ID connect was updated successfully.");
+            log.info("Current authentication info for Open ID connect was retrieved. New config {}", config);
             return null;
         });
         return Response.noContent().build();

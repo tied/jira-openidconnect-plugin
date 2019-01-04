@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class AuthenticationInfoChecker {
 
-    public static void checkAuthenticationInfo(AuthenticationInfo config) {
+    public static void checkAuthenticationInfo(AuthenticationInfo config) throws AuthenticationInfoException {
         StringBuilder sb = new StringBuilder();
         if (StringUtils.isBlank(config.getDomain())) {
             sb.append("Authorization domain is not set up!").append(System.lineSeparator());

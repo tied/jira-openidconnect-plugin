@@ -1,17 +1,18 @@
 package com.atlassian.openid.connect.auth;
 
 import com.atlassian.openid.connect.config.AuthenticationInfo;
+import com.atlassian.openid.connect.config.AuthenticationInfoException;
+import com.atlassian.openid.connect.util.AuthenticationInfoChecker;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.sal.api.transaction.TransactionTemplate;
-import com.atlassian.openid.connect.util.AuthenticationInfoChecker;
 import com.auth0.client.auth.AuthAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class AuthenticationProvider {
+public class AuthenticationProvider {
 
     private final TransactionTemplate transactionTemplate;
 
@@ -24,7 +25,7 @@ public final class AuthenticationProvider {
         this.pluginSettingsFactory = pluginSettingsFactory;
     }
 
-    public AuthenticationHandler getInstance() {
+    public AuthenticationHandler getInstance() throws AuthenticationInfoException {
         return transactionTemplate.execute(() -> {
             PluginSettings settings = pluginSettingsFactory.createGlobalSettings();
             AuthenticationInfo config = new AuthenticationInfo();

@@ -41,4 +41,12 @@ public class AuthenticationInfo {
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticationInfo{" +
+                "domain='" + domain + '\'' +
+                ", clientId='" + clientId + '\'' +
+                '}';
+    }
 }

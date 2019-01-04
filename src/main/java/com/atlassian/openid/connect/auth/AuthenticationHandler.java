@@ -1,6 +1,7 @@
 package com.atlassian.openid.connect.auth;
 
 import com.atlassian.openid.connect.config.AuthenticationInfo;
+import com.atlassian.openid.connect.model.Tokens;
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.auth.AuthorizeUrlBuilder;
 import com.auth0.exception.Auth0Exception;
@@ -33,7 +34,7 @@ public class AuthenticationHandler {
         this.authInfo = authInfo;
     }
 
-    public TokenHolder handle(HttpServletRequest req) {
+    public Tokens handle(HttpServletRequest req) {
         String authorizationCode = req.getParameter(KEY_CODE);
         String redirectUri = req.getRequestURL().toString();
 
@@ -48,7 +49,8 @@ public class AuthenticationHandler {
         if (!userInfo.getValues().containsKey(KEY_SUB)) {
             throw new AuthenticationException("An error occurred while trying to verify the user identity: The 'sub' claim contained in the token was null.");
         }
-        return tokenHolder;
+        return new Tokens(tokenHolder.getAccessToken(), tokenHolder.getIdToken(),
+                            tokenHolder.getRefreshToken(), tokenHolder.getTokenType(), tokenHolder.getExpiresIn());
     }
 
     private TokenHolder getTokenHolder(String authorizationCode, String redirectUri) throws Auth0Exception {

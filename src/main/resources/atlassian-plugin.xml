@@ -22,11 +22,23 @@
   <servlet name="Oauth Page Servlet" i18n-name-key="oauth-page-servlet.name" key="oauth-page-servlet" class="com.atlassian.openid.connect.servlet.OauthLoginServlet">
     <description key="oauth-page-servlet.description">The Oauth Page Servlet Plugin</description>
     <url-pattern>/oauth-login</url-pattern>
+    <init-param>
+      <param-name>callbackPath</param-name>
+      <param-value>/jira/plugins/servlet/callback</param-value>
+    </init-param>
   </servlet>
 
   <servlet name="Callback Oauth Sevlet" i18n-name-key="callback-oauth-sevlet.name" key="callback-oauth-sevlet" class="com.atlassian.openid.connect.servlet.CallbackAuthorizeServlet">
     <description key="callback-oauth-sevlet.description">The callback of oauth authorization</description>
     <url-pattern>/callback</url-pattern>
+    <init-param>
+      <param-name>redirectOnSuccess</param-name>
+      <param-value>/jira/plugins/servlet/success</param-value>
+    </init-param>
+    <init-param>
+      <param-name>redirectOnFail</param-name>
+      <param-value>/jira/plugins/servlet/oauth-login</param-value>
+    </init-param>
   </servlet>
 
   <servlet name="Success oauth logged in" i18n-name-key="success-oauth-logged-in.name" key="success-oauth-logged-in"
