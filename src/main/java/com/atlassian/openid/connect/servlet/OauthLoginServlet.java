@@ -45,7 +45,6 @@ public class OauthLoginServlet extends HttpServlet {
         handle(req, resp);
     }
 
-    // todo: test this method
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         handle(req, resp);

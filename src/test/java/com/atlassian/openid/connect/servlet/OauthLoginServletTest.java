@@ -3,13 +3,11 @@ package com.atlassian.openid.connect.servlet;
 import com.atlassian.openid.connect.auth.AuthenticationHandler;
 import com.atlassian.openid.connect.auth.AuthenticationProvider;
 import com.atlassian.openid.connect.config.AuthenticationInfoException;
-import com.atlassian.openid.connect.util.SessionConstants;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.auth0.client.auth.AuthorizeUrlBuilder;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -22,14 +20,11 @@ import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OauthLoginServletTest {
-
-    private static final String OAUTH_LOGIN_PAGE_TEMPLATE = "/templates/login-oauth.vm";
 
     @Mock
     private AuthenticationProvider mockAuthenticationProvider;
@@ -68,32 +63,6 @@ public class OauthLoginServletTest {
 
         oauthLoginServlet = new OauthLoginServlet(mockAuthenticationProvider);
         FieldUtils.writeField(oauthLoginServlet, "callbackPath", AuthInfo.CALLBACK_PATH, true);
-    }
-
-    @Test
-    @Ignore
-    public void shouldRenderLoginTemplate() throws Exception {
-        // When
-        oauthLoginServlet.doGet(mockRequest, mockResponse);
-
-        // Then
-        verify(mockTemplateRenderer).render(OAUTH_LOGIN_PAGE_TEMPLATE, mockPrintWriter);
-    }
-
-    @Test
-    @Ignore
-    public void shouldForwardOnSuccessPageWhenUserAlreadyLoggedIn() throws Exception {
-        // Given
-        when(mockSession.getAttribute(SessionConstants.ID_TOKEN)).thenReturn("token");
-        when(mockRequest.getRequestDispatcher("success")).thenReturn(mockRequestDispatcher);
-
-        // When
-        oauthLoginServlet.doGet(mockRequest, mockResponse);
-
-        // Then
-        verify(mockTemplateRenderer, never()).render(OAUTH_LOGIN_PAGE_TEMPLATE, mockPrintWriter);
-        verify(mockRequest).getRequestDispatcher("success");
-        verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
     }
 
     @Test

@@ -14,7 +14,6 @@ import com.atlassian.seraph.auth.DefaultAuthenticator;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.auth0.json.auth.UserInfo;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -96,7 +95,6 @@ public class SuccessOauthLoggedInServletTest {
     }
 
     @Test
-    @Ignore
     public void shouldCreateAndAuthenticateUserWhenUserNotExist() throws Exception {
         // Given
         when(mockUserSearchService.findUsersByEmail("sample@mail.com")).thenReturn(Collections.EMPTY_LIST);
@@ -117,7 +115,6 @@ public class SuccessOauthLoggedInServletTest {
     }
 
     @Test
-    @Ignore
     public void shouldAuthenticateUserWhenUserExistInSystem() throws Exception {
         // Given
         when(mockUserSearchService.findUsersByEmail("sample@mail.com")).thenReturn(Collections.singletonList(mockAppUser));
@@ -134,7 +131,6 @@ public class SuccessOauthLoggedInServletTest {
     }
 
     @Test
-    @Ignore
     public void shouldNotCreateNewUserWhenCreateExceptionWasThrown() throws Exception {
         // Given
         when(mockUserSearchService.findUsersByEmail("sample@mail.com")).thenReturn(Collections.EMPTY_LIST);

@@ -9,7 +9,6 @@ import com.auth0.exception.Auth0Exception;
 import com.auth0.json.auth.UserInfo;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -99,7 +98,6 @@ public class CallbackAuthorizeServletTest {
     }
 
     @Test
-    @Ignore
     public void shouldRedirectOnLoginPageWhenAuthenticationExceptionWasThrown() throws Exception {
         // Given
         when(authenticationHandler.handle(mockRequest)).thenThrow(new AuthenticationException());
