@@ -1,12 +1,15 @@
 package com.atlassian.openid.connect.servlet;
 
 import com.atlassian.jira.bc.user.search.UserSearchService;
+import com.atlassian.jira.exception.AddException;
 import com.atlassian.jira.exception.CreateException;
 import com.atlassian.jira.exception.PermissionException;
 import com.atlassian.jira.security.JiraAuthenticationContext;
+import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.UserDetails;
 import com.atlassian.jira.user.util.UserManager;
+import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.openid.connect.util.SessionConstants;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.JiraImport;
@@ -29,6 +32,7 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(SuccessOauthLoggedInServlet.class);
     private static final String SUCCESS_LOGIN_PAGE = "/templates/success-login.vm";
+    private static final String JIRA_SOFTWARE_USERS_GROUP = "jira-software-users";
 
     @JiraImport
     private TemplateRenderer templateRenderer;
@@ -42,12 +46,21 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
     @JiraImport
     private JiraAuthenticationContext authContext;
 
+    @JiraImport
+    private UserUtil userUtil;
+
+    @JiraImport
+    private GroupManager groupManager;
+
     public SuccessOauthLoggedInServlet(TemplateRenderer templateRenderer, UserManager userManager,
-                                       UserSearchService userSearchService, JiraAuthenticationContext authContext) {
+                                       UserSearchService userSearchService, JiraAuthenticationContext authContext,
+                                       UserUtil userUtil, GroupManager groupManager) {
         this.templateRenderer = templateRenderer;
         this.userManager = userManager;
         this.userSearchService = userSearchService;
         this.authContext = authContext;
+        this.userUtil = userUtil;
+        this.groupManager = groupManager;
     }
 
     @Override
@@ -83,7 +96,12 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
                 return;
             }
         }
-        loginUser(req, appUser);
+        try {
+            loginUser(req, appUser);
+        } catch (AddException | PermissionException e) {
+            log.error("Cannot log in user! {}", e);
+            e.printStackTrace();
+        }
 
         log.info("Render template: {}", SUCCESS_LOGIN_PAGE);
         templateRenderer.render(SUCCESS_LOGIN_PAGE, context, resp.getWriter());
@@ -93,7 +111,7 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
         log.info("Creating new user with email {}", userInfoValues.get("email"));
         UserDetails userDetails = new UserDetails((String) userInfoValues.get("nickname"), (String) userInfoValues.get("name"))
                 .withEmail((String) userInfoValues.get("email"))
-                .withPassword("");
+                .withPassword("1");
 
         ApplicationUser appUser;
         try {
@@ -111,9 +129,12 @@ public class SuccessOauthLoggedInServlet extends HttpServlet {
         return appUser;
     }
 
-    private void loginUser(HttpServletRequest req, ApplicationUser appUser) {
+    private void loginUser(HttpServletRequest req, ApplicationUser appUser)
+            throws AddException, PermissionException {
         authContext.setLoggedInUser(appUser);
         log.info("Log in retrieved user {}", appUser);
+
+        userUtil.addUserToGroup(groupManager.getGroup(JIRA_SOFTWARE_USERS_GROUP), appUser);
 
         HttpSession session = req.getSession();
         session.setAttribute(DefaultAuthenticator.LOGGED_IN_KEY, appUser);
