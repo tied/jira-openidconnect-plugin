@@ -31,7 +31,7 @@
         <div class="form-footer">
             <div class="buttons-container">
                 <div class="buttons">
-                    <input type="submit" value="Save" class="aui-button">
+                    <input type="submit" value="Save" class="aui-button" id="save-button">
                 </div>
             </div>
         </div>

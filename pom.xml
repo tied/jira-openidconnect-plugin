@@ -264,6 +264,12 @@
                             <httpPort>8000</httpPort>
                             <version>${jira.version}</version>
                             <productDataVersion>${jira.version}</productDataVersion>
+                            <applications>
+                                <application>
+                                    <applicationKey>jira-servicedesk</applicationKey>
+                                    <version>${jira.servicedesk.version}</version>
+                                </application>
+                            </applications>
 
                             <pluginArtifacts>
                                 <pluginArtifact>
@@ -342,5 +348,6 @@
         <xvfb.enable>false</xvfb.enable>
         <cst.test.mode>false</cst.test.mode>
         <xvfb.options>-listen,tcp,-once,-screen,0,1920x1080x24</xvfb.options>
+        <jira.servicedesk.version>3.0.11</jira.servicedesk.version>
     </properties>
 </project>
