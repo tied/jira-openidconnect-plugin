@@ -63,7 +63,7 @@
 
   <web-item key="website_link" name="OAuth Login" section="system.top.navigation.bar" weight="10">
     <condition class="com.atlassian.jira.plugin.webfragment.conditions.UserLoggedInCondition" invert="true"/>
-    <label>Open ID Connect Plugin</label>
+    <label>Log in via OIDC</label>
     <!-- todo: set unique plugin id in the path -->
     <link linkId="oauth-link" absolute="false">/plugins/servlet/oauth-login</link>
   </web-item>

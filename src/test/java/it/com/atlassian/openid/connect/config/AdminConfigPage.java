@@ -22,7 +22,7 @@ public class AdminConfigPage implements Page  {
     @Inject
     protected PageBinder pageBinder;
 
-    @ElementBy(id = "domainElement")
+@ElementBy(id = "domain")
     private PageElement domainElement;
 
     @ElementBy(id = "client-id")
@@ -74,8 +74,8 @@ public class AdminConfigPage implements Page  {
         this.clientIdElement.clear().type(clientId);
     }
 
-    public void setClientSecretElement(String clientSecretElement) {
-        this.clientSecretElement.clear().type(clientSecretElement);
+    public void setClientSecret(String clientSecret) {
+        this.clientSecretElement.clear().type(clientSecret);
     }
 
 }
